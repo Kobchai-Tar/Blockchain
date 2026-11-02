@@ -1,0 +1,110 @@
+{
+  "_format": "hh3-artifact-1",
+  "contractName": "SimpleMath",
+  "sourceName": "contracts/SimpleMath.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "x",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "y",
+          "type": "uint256"
+        }
+      ],
+      "name": "add",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "x",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "y",
+          "type": "uint256"
+        }
+      ],
+      "name": "divide",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "x",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "y",
+          "type": "uint256"
+        }
+      ],
+      "name": "multiply",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "x",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "y",
+          "type": "uint256"
+        }
+      ],
+      "name": "subtract",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x6080604052348015600e575f5ffd5b506101038061001c5f395ff3fe6080604052348015600e575f5ffd5b50600436106044575f3560e01c8063165c4a161460485780633ef5e445146048578063771602f7146069578063f88e9fbf146048575b5f5ffd5b605760533660046090565b6078565b60405190815260200160405180910390f35b605760743660046090565b6080565b5f5b92915050565b5f6089828460af565b9392505050565b5f5f6040838503121560a0575f5ffd5b50508035926020909101359150565b80820180821115607a57634e487b7160e01b5f52601160045260245ffdfea26469706673582212200eeba9d9f2a56cf93864fefce6e2bfa910808cf667589b8055cefccd7dadcc4464736f6c63430008220033",
+  "deployedBytecode": "0x6080604052348015600e575f5ffd5b50600436106044575f3560e01c8063165c4a161460485780633ef5e445146048578063771602f7146069578063f88e9fbf146048575b5f5ffd5b605760533660046090565b6078565b60405190815260200160405180910390f35b605760743660046090565b6080565b5f5b92915050565b5f6089828460af565b9392505050565b5f5f6040838503121560a0575f5ffd5b50508035926020909101359150565b80820180821115607a57634e487b7160e01b5f52601160045260245ffdfea26469706673582212200eeba9d9f2a56cf93864fefce6e2bfa910808cf667589b8055cefccd7dadcc4464736f6c63430008220033",
+  "linkReferences": {},
+  "deployedLinkReferences": {},
+  "immutableReferences": {},
+  "inputSourceName": "project/contracts/SimpleMath.sol",
+  "buildInfoId": "solc-0_8_34-69fd67a1c940dc02610eb9a5a3f4485860c94e63"
+}
