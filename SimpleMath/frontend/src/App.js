@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Button, Table, Form, Container, Card } from "react-bootstrap";
 import { ethers } from "ethers";
-// import SimpleMathContract from "";
-const contractAddress = "";
+import SimpleMathContract from "./contracts/SimpleMath.sol/SimpleMath.json";
+const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 const WEB3_URL = "http://127.0.0.1:8545/";
 
 function App() {
   const [provider, setProvider] = useState(null);
+  const [connected, setConnected] = useState(false);
+  const [firstOperand, setFirstOperand] = useState("");
+  const [secondOperand, setSecondOperand] = useState("");
+  const [contract, setContract] = useState(null);
+  const [result, setResult] = useState("");
 
   useEffect(() => {
     let providerInstance;
@@ -19,17 +24,65 @@ function App() {
     console.log("Provider set:", providerInstance);
   }, []);
 
+
   const connectWallet = async () => {
     try {
+      const signerInstance = await provider.getSigner(); // คนที่ลงลายมือ (ผู้ทำธุรกรรม) จะเป็น signer
+      console.log("Owner address", await signerInstance.getAddress());
+      console.log("contract address", contractAddress); 
+      console.log("abi", SimpleMathContract.abi);
+      const sm = new ethers.Contract(contractAddress, SimpleMathContract.abi, signerInstance); 
+      console.log("contract", sm);
+      setConnected(true);
+      setContract(sm);
     } catch (e) {
       console.error(e);
     }
   };
 
-  const handleCalculation = async operator => {
-    try {
   
-    } catch (e) {
+  const handleCalculation = async operator => { // function ที่ใช้คำนวณผลลัพธ์จาก smart contract
+    try {
+      console.log("firstOperand", firstOperand);
+      console.log("secondOperand", secondOperand);
+      setFirstOperand(""); // clear input after calculation
+      setSecondOperand("");
+      let num1 = parseInt(firstOperand);
+      let num2 = parseInt(secondOperand);
+      let res;
+      let sign = "";
+      if(!connected || !contract) {
+        res = "Please connect your wallet first."; 
+      }
+      if (isNaN(num1) || isNaN(num2)) {
+        res = "Please enter valid numbers.";
+      }
+        switch (operator) {
+          case 'add': res = await contract.add(num1, num2); sign = "+"; break;
+          case 'subtract': 
+            res = await contract.subtract(num1, num2);
+            if (res < 0) {
+            sign = "-"; 
+            res = Math.abs(res);
+        } else {
+          sign = "+";
+        }
+        break;
+      case 'multiply': res = await contract.multiply(num1, num2); sign = "*"; break;
+      case 'divide': 
+        if (num2 === 0) {
+          res = "Cannot divide by zero.";
+        } else {
+          res = await contract.divide(num1, num2);
+          sign = "+";
+        }
+        break;
+      default: res = "Invalid operator."; break;
+        }
+        res = res !== null ? (sign === "+" ? "": "-")  + res.toString() : "Not Available.";
+        // = จะมีความสำคัญน้อยที่สุดและจะทำหลังสุด ถ้า sign เป็น + จะไม่แสดงเครื่องหมาย แต่ถ้าเป็น - จะใส่เครื่องหมาย - ข้างหน้า และแปลง res เป็น string
+      setResult(res);
+      } catch (e) {
       console.error(e);
     }
   };
@@ -37,8 +90,11 @@ function App() {
   return (
     <Container fluid style={{ width: "80%", marginTop: "20px" }}>
       <Button
+        variant={connected ? "primary" : "secondary"}
         className="m-3"
+        onClick={connectWallet}
       >
+        {connected ? "Connected" : "Connect"}
       </Button>
 
       <Table striped bordered hover>
@@ -60,12 +116,16 @@ function App() {
               <Form.Control
                 type="number"
                 name="firstOperand"
+                value={firstOperand}  // เอาค่าที่เราใส่ใน input element มาเก็บไว้ใน state ของ firstOperand 
+                onChange={e => setFirstOperand(e.target.value)} // target คือ input element ที่เรากำลังแก้ไขอยู่
               /> 
             </td>
             <td colSpan={"2"}>
               <Form.Control
                 type="number"
                 name="secondOperand"
+                value={secondOperand} // เอาค่าที่เราใส่ใน input element มาเก็บไว้ใน state ของ secondOperand
+                onChange={e => setSecondOperand(e.target.value)}
               />
             </td>
           </tr>
@@ -75,6 +135,7 @@ function App() {
               <Button
                 variant="success"
                 className="w-100"
+                onClick={() => handleCalculation("add")}
               >
                 Add
               </Button>
@@ -83,6 +144,7 @@ function App() {
               <Button
                 variant="danger"
                 className="w-100"
+                onClick={() => handleCalculation("subtract")}
               >
                 Subtract
               </Button>
@@ -91,6 +153,7 @@ function App() {
               <Button
                 variant="warning"
                 className="w-100"
+                onClick={() => handleCalculation("multiply")}
               >
                 Multiply
               </Button>
@@ -99,6 +162,7 @@ function App() {
               <Button
                 variant="info"
                 className="w-100"
+                onClick={() => handleCalculation("divide")}
               >
                 Divide
               </Button>
@@ -110,7 +174,7 @@ function App() {
       {/* Result Card */}
       <Card className="mt-4">
         <Card.Body>
-          <Card.Title>Calculation Result:</Card.Title>
+          <Card.Title>Calculation Result:{result}</Card.Title>
         </Card.Body>
       </Card>
     </Container>
