@@ -5,15 +5,15 @@ contract SimpleMath {
     function add(uint x , uint y) public pure returns (uint) {
         return x + y;
     }
-    function subtract(uint x , uint y) public pure returns (uint) {
-        return 0;
+    function subtract(uint x , uint y) public pure returns (int) {
+        return int(x) - int(y);
     }
 
     function multiply(uint x , uint y) public pure returns (uint) {
-        return 0;
+        return x * y;
     }
 
     function divide(uint x , uint y) public pure returns (uint) {
-        return 0;
+        return x / y;
     }
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Table, Form, Container, Card } from "react-bootstrap";
 import { ethers } from "ethers";
 import SimpleMathContract from "./contracts/SimpleMath.sol/SimpleMath.json";
-const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+const contractAddress = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
 const WEB3_URL = "http://127.0.0.1:8545/";
 
 function App() {
@@ -21,6 +21,10 @@ function App() {
       providerInstance = new ethers.providers.JsonRpcProvider(WEB3_URL); // local provider for testing
     }
     setProvider(providerInstance);
+    // ฟังก์ชันใน contract เป็น pure ใช้แค่ provider (read-only) ก็เรียกได้เลย ไม่ต้องมี wallet/signer
+    const sm = new ethers.Contract(contractAddress, SimpleMathContract.abi, providerInstance);
+    setContract(sm);
+    setConnected(true);
     console.log("Provider set:", providerInstance);
   }, []);
 
@@ -52,18 +56,20 @@ function App() {
       let res;
       let sign = "";
       if(!connected || !contract) {
-        res = "Please connect your wallet first."; 
+        setResult("Please connect your wallet first.");
+        return;
       }
       if (isNaN(num1) || isNaN(num2)) {
-        res = "Please enter valid numbers.";
+        setResult("Please enter valid numbers.");
+        return;
       }
         switch (operator) {
           case 'add': res = await contract.add(num1, num2); sign = "+"; break;
           case 'subtract': 
             res = await contract.subtract(num1, num2);
-            if (res < 0) {
+            if (res.lt(0)) {
             sign = "-"; 
-            res = Math.abs(res);
+            res = res.abs();
         } else {
           sign = "+";
         }
@@ -79,7 +85,7 @@ function App() {
         break;
       default: res = "Invalid operator."; break;
         }
-        res = res !== null ? (sign === "+" ? "": "-")  + res.toString() : "Not Available.";
+        res = (sign === "-" ? "-" : "") + res.toString();
         // = จะมีความสำคัญน้อยที่สุดและจะทำหลังสุด ถ้า sign เป็น + จะไม่แสดงเครื่องหมาย แต่ถ้าเป็น - จะใส่เครื่องหมาย - ข้างหน้า และแปลง res เป็น string
       setResult(res);
       } catch (e) {

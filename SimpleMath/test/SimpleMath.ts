@@ -10,12 +10,16 @@ describe("SimpleMath", function () {
   });
   
   it("should subtract two numbers correctly", async function () { // test case 
-    assert.isTrue(false);("Not implemented yet"); // placeholder for the actual test implemen
+    const simpleMath = await ethers.deployContract("SimpleMath");
+    assert.equal(await simpleMath.subtract(5n, 3n), 2n, "Subtraction result is incorrect");
+    assert.equal(await simpleMath.subtract(3n, 5n), -2n, "Negative subtraction result is incorrect");
   });
   it("should multiply two numbers correctly", async function () { // test case 
-    assert.isTrue(false);("Not implemented yet"); // placeholder for the actual test implemen
+    const simpleMath = await ethers.deployContract("SimpleMath");
+    assert.equal(await simpleMath.multiply(4n, 5n), 20n, "Multiplication result is incorrect");
   });
   it("should divide two numbers correctly", async function () { // test case 
-    assert.isTrue(false);("Not implemented yet"); // placeholder for the actual test implemen
+    const simpleMath = await ethers.deployContract("SimpleMath");
+    assert.equal(await simpleMath.divide(10n, 2n), 5n, "Division result is incorrect");
   });
 });
