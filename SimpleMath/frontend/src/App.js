@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button, Table, Form, Container, Card } from "react-bootstrap";
 import { ethers } from "ethers";
 import SimpleMathContract from "./contracts/SimpleMath.sol/SimpleMath.json";
+
 const contractAddress = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
 const WEB3_URL = "http://127.0.0.1:8545/";
 
