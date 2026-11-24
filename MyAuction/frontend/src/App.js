@@ -25,7 +25,7 @@ import MessageBox from "./components/MessageBox";
 
 const WEB3_URL = "ws://127.0.0.1:8545";
 const BID_EVENT = "BidEvent";
-const WITHDRAWN_EVENT = "WithdrawnEvent";
+const WITHDRAWN_EVENT = "WithdrawEvent";
 const CANCELLED_EVENT = "CancelledEvent";
 // const DESTRUCTED_EVENT = "DestructedEvent";
 const ENDED_EVENT = "EndedEvent";
