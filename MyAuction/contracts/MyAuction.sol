@@ -115,12 +115,12 @@ contract MyAuction is Auction {
         uint256 amount = 0;                              // จำนวนเงินที่จะถอน (คำนวณทีหลัง)
         address payable withdrawer = payable(msg.sender); // คนที่กำลังเรียก withdraw
         // ประมูลต้องจบหรือถูกยกเลิกไปแล้วเท่านั้น ยังประมูลอยู่ห้ามถอน
-        require(STATE != AuctionState.STARTED, "Auction is still ongoing");
+        require(STATE != AuctionState.STARTED, "Auction is still ongoing"); // จะถอนเงินได้ก็ต่อเมื่อไม่มี status
 
-        if(withdrawer == owner) { // Owner can withdraw the highest bid
+        if(withdrawer == owner) { // เช็คคนถอนเป็นเจ้าของมั้ย
             // กรณีที่ 1: เจ้าของถอน -> รับเงินราคาประมูลสูงสุด ได้เฉพาะเมื่อ "จบประมูล" (ไม่ใช่ยกเลิก)
             require(STATE == AuctionState.ENDED, "Owner can only withdraw after auction ended");
-            require(bids[highestBidder] > 0, "No funds to withdraw for highest bidder");
+            require(bids[highestBidder] > 0, "No funds to withdraw for highest bidder"); // ไม่ให้เจ้าของถอนซ้ำ
             amount = highestBid;            // เงินที่เจ้าของได้ = ราคาประมูลสูงสุด
             bids[highestBidder] = 0;        // Reset the highest bidder's bid (ล้างบัญชีผู้ชนะแล้ว กันถอนซ้ำ)
         } else { // Other bidders can withdraw their bids
@@ -128,14 +128,14 @@ contract MyAuction is Auction {
             // เงื่อนไข: (จบประมูลและไม่ใช่ผู้ชนะ) หรือ (ประมูลถูกยกเลิก) และต้องมีเงินคงเหลือ
             bool allowed = ((STATE == AuctionState.ENDED && withdrawer != highestBidder) ||
                 (STATE == AuctionState.CANCELED)) &&
-                bids[withdrawer] > 0;
+                bids[withdrawer] > 0; // ผู้ถอนยอดนั้นต้องมียอดให้ถอน
             require(allowed, "You are not allowed to withdraw");
             amount = bids[withdrawer];      // ได้คืนเต็มจำนวนที่ตัวเองเคย bid สะสมไว้
             bids[withdrawer] = 0;           // ล้างยอดของตัวเอง กันถอนซ้ำ (double withdraw)
         }
         // โอนเงินจริงออกจาก contract ด้วย call (วิธีที่ปลอดภัยกว่า transfer/send)
-        (bool sent, ) = payable(withdrawer).call{value: amount}("");
-        require(sent, "Failed to send Ether");
+        (bool sent, ) = payable(withdrawer).call{value: amount}(""); // คำสั่งถอนเงิน
+        require(sent, "Failed to send Ether"); // ดักด้วย require อีกที
         emit WithdrawEvent(withdrawer, amount, block.timestamp); // ปล่อย log แจ้งการถอน
     }
 
