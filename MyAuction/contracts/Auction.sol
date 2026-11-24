@@ -34,7 +34,7 @@ abstract contract Auction {
     // ถอนเงินออกจาก contract
     function withdraw () virtual external;
     // ดูรายละเอียดสินค้า
-    function getProduct() virtual external view returns (string memory, string memory); // ถ้ามีข้อมูลที่เราไม่รู้จัก เราสามารถใช้ string memory แทนได้
+    function getProducInfo() virtual external view returns (string memory, string memory); // ถ้ามีข้อมูลที่เราไม่รู้จัก เราสามารถใช้ string memory แทนได้
     
     // events 
     
